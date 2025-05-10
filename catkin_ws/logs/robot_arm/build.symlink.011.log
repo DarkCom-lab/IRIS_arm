@@ -1,0 +1,12 @@
+Symlinking /home/vboxuser/catkin_ws/devel/share/robot_arm/cmake/robot_armConfig-version.cmake
+Symlinking /home/vboxuser/catkin_ws/devel/share/robot_arm/cmake/robot_armConfig.cmake
+Symlinking /home/vboxuser/catkin_ws/devel/lib/pkgconfig/robot_arm.pc
+Cleaning: (/home/ghassen_saidi/catkin_ws/devel/.private/robot_arm/share/robot_arm/cmake/robot_armConfig-version.cmake, /home/ghassen_saidi/catkin_ws/devel/share/robot_arm/cmake/robot_armConfig-version.cmake)
+Cleaning: (/home/ghassen_saidi/catkin_ws/devel/.private/robot_arm/share/robot_arm/cmake/robot_armConfig.cmake, /home/ghassen_saidi/catkin_ws/devel/share/robot_arm/cmake/robot_armConfig.cmake)
+Cleaning: (/home/ghassen_saidi/catkin_ws/devel/.private/robot_arm/lib/pkgconfig/robot_arm.pc, /home/ghassen_saidi/catkin_ws/devel/lib/pkgconfig/robot_arm.pc)
+Unlinking: /home/ghassen_saidi/catkin_ws/devel/share/robot_arm/cmake/robot_armConfig-version.cmake
+Already unlinked: {}
+Unlinking: /home/ghassen_saidi/catkin_ws/devel/share/robot_arm/cmake/robot_armConfig.cmake
+Already unlinked: {}
+Unlinking: /home/ghassen_saidi/catkin_ws/devel/lib/pkgconfig/robot_arm.pc
+Already unlinked: {}

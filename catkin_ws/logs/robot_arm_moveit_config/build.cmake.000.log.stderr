@@ -1,0 +1,1 @@
+[33mWARNING: Metapackage "robot_arm_moveit_config" should not have other dependencies besides a buildtool_depend on catkin and exec_depends.[0m

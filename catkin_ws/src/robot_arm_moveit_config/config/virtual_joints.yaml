@@ -1,0 +1,5 @@
+virtual_joints:
+- name: world_to_base
+  parent_frame: world                  # Parent frame (matches URDF root)
+  child_link: base_link                # Child link (robot's root link)
+  type: fixed                          # Joint type (same as URDF's fixed joint)
