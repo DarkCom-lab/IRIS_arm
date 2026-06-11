@@ -1,2 +1,0 @@
-- setup-file:
-    local-name: /home/vboxuser/catkin_ws/devel/.private/robot_arm_moveit_config/setup.sh
