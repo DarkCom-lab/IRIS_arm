@@ -451,3 +451,86 @@ export async function completeTimerSession(
   if (error) throw error
   return data
 }
+
+// Email queries
+export async function getEmailMessages(userId: string, hoursBack: number = 24) {
+  const supabase = await createClient()
+  const since = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString()
+
+  const { data, error } = await supabase
+    .from('email_messages')
+    .select('*')
+    .eq('user_id', userId)
+    .gte('received_at', since)
+    .order('received_at', { ascending: false })
+
+  if (error) throw error
+  return data
+}
+
+export async function createEmailMessage(
+  userId: string,
+  emailId: string,
+  sender: string,
+  senderEmail: string,
+  subject: string,
+  preview: string,
+  body: string,
+  receivedAt: string
+) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('email_messages')
+    .insert([
+      {
+        user_id: userId,
+        email_id: emailId,
+        sender,
+        sender_email: senderEmail,
+        subject,
+        preview,
+        body,
+        received_at: receivedAt,
+      },
+    ])
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function updateEmailMessage(
+  messageId: string,
+  userId: string,
+  updates: Record<string, any>
+) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('email_messages')
+    .update(updates)
+    .eq('id', messageId)
+    .eq('user_id', userId)
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function deleteEmailMessage(messageId: string, userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('email_messages')
+    .delete()
+    .eq('id', messageId)
+    .eq('user_id', userId)
+
+  if (error) throw error
+}
+
+export async function markEmailAsRead(messageId: string, userId: string) {
+  return updateEmailMessage(messageId, userId, { is_read: true })
+}
+
+export async function markEmailAsStarred(messageId: string, userId: string, starred: boolean) {
+  return updateEmailMessage(messageId, userId, { is_starred: starred })
+}
