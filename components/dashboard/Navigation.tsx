@@ -16,6 +16,7 @@ export default function Navigation({ user, onSignOut }: NavigationProps) {
     { label: 'Tasks', href: '/tasks' },
     { label: 'Habits', href: '/habits' },
     { label: 'Notes', href: '/notes' },
+    { label: 'Timer', href: '/timer' },
   ]
 
   return (

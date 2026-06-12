@@ -313,3 +313,141 @@ export async function deleteReminder(reminderId: string, userId: string) {
 
   if (error) throw error
 }
+
+// Get reminders for a specific note
+export async function getRemindersForNote(userId: string, noteId: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('reminders')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('note_id', noteId)
+    .order('reminder_date', { ascending: true })
+
+  if (error) throw error
+  return data
+}
+
+// Timer queries
+export async function getTimers(userId: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('timers')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data
+}
+
+export async function createTimer(
+  userId: string,
+  name: string,
+  durationSeconds: number,
+  timerType: 'pomodoro' | 'countdown' | 'stopwatch'
+) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('timers')
+    .insert([
+      {
+        user_id: userId,
+        name,
+        duration_seconds: durationSeconds,
+        timer_type: timerType,
+      },
+    ])
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function updateTimer(
+  timerId: string,
+  userId: string,
+  updates: Record<string, any>
+) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('timers')
+    .update(updates)
+    .eq('id', timerId)
+    .eq('user_id', userId)
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function deleteTimer(timerId: string, userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('timers')
+    .delete()
+    .eq('id', timerId)
+    .eq('user_id', userId)
+
+  if (error) throw error
+}
+
+// Timer session queries
+export async function getTimerSessions(userId: string, limit: number = 20) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('timer_sessions')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (error) throw error
+  return data
+}
+
+export async function createTimerSession(
+  userId: string,
+  name: string,
+  timerType: string,
+  durationSeconds: number,
+  timerId?: string
+) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('timer_sessions')
+    .insert([
+      {
+        user_id: userId,
+        timer_id: timerId,
+        name,
+        timer_type: timerType,
+        duration_seconds: durationSeconds,
+      },
+    ])
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function completeTimerSession(
+  sessionId: string,
+  userId: string,
+  actualDurationSeconds: number
+) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('timer_sessions')
+    .update({
+      completed: true,
+      actual_duration_seconds: actualDurationSeconds,
+      completed_at: new Date().toISOString(),
+    })
+    .eq('id', sessionId)
+    .eq('user_id', userId)
+    .select()
+
+  if (error) throw error
+  return data
+}

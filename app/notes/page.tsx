@@ -151,6 +151,7 @@ export default function NotesPage() {
 
         <NoteGrid
           notes={filteredNotes}
+          userId={user.id}
           onUpdate={handleUpdateNote}
           onDelete={handleDeleteNote}
         />
