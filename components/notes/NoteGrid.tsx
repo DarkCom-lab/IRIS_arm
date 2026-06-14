@@ -90,7 +90,7 @@ export default function NoteGrid({ notes, userId, onUpdate, onDelete }: NoteGrid
                   📌
                 </button>
                 <button
-                  onClick={() => handleDelete(note.id)}
+                  onClick={() => onDelete(note.id)}
                   className="p-1 rounded hover:bg-red-500/20 text-red-600 transition-colors"
                   title="Delete"
                 >

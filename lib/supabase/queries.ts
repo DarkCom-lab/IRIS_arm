@@ -534,3 +534,127 @@ export async function markEmailAsRead(messageId: string, userId: string) {
 export async function markEmailAsStarred(messageId: string, userId: string, starred: boolean) {
   return updateEmailMessage(messageId, userId, { is_starred: starred })
 }
+
+// Playlist queries
+export async function getPlaylists(userId: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('playlists')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data
+}
+
+export async function createPlaylist(userId: string, name: string, description?: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('playlists')
+    .insert([{ user_id: userId, name, description }])
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function updatePlaylist(playlistId: string, userId: string, updates: Record<string, any>) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('playlists')
+    .update(updates)
+    .eq('id', playlistId)
+    .eq('user_id', userId)
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function deletePlaylist(playlistId: string, userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('playlists')
+    .delete()
+    .eq('id', playlistId)
+    .eq('user_id', userId)
+
+  if (error) throw error
+}
+
+// Track queries
+export async function getPlaylistTracks(playlistId: string, userId: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('playlist_tracks')
+    .select('*, track:tracks(*)')
+    .eq('playlist_id', playlistId)
+    .eq('user_id', userId)
+    .order('position', { ascending: true })
+
+  if (error) throw error
+  return data
+}
+
+export async function createTrack(
+  userId: string,
+  youtubeId: string,
+  title: string,
+  artist?: string,
+  durationSeconds?: number,
+  thumbnailUrl?: string
+) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('tracks')
+    .insert([
+      {
+        user_id: userId,
+        youtube_id: youtubeId,
+        title,
+        artist,
+        duration_seconds: durationSeconds,
+        thumbnail_url: thumbnailUrl,
+      },
+    ])
+    .select()
+
+  if (error) throw error
+  return data?.[0]
+}
+
+export async function addTrackToPlaylist(playlistId: string, trackId: string, userId: string, position: number) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('playlist_tracks')
+    .insert([{ playlist_id: playlistId, track_id: trackId, user_id: userId, position }])
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+export async function removeTrackFromPlaylist(playlistTrackId: string, userId: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('playlist_tracks')
+    .delete()
+    .eq('id', playlistTrackId)
+    .eq('user_id', userId)
+
+  if (error) throw error
+}
+
+export async function reorderPlaylistTrack(playlistTrackId: string, newPosition: number, userId: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('playlist_tracks')
+    .update({ position: newPosition })
+    .eq('id', playlistTrackId)
+    .eq('user_id', userId)
+    .select()
+
+  if (error) throw error
+  return data
+}

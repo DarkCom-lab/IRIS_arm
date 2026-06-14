@@ -8,6 +8,7 @@ import EmailList from '@/components/email/EmailList'
 import EmailModal from '@/components/email/EmailModal'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export default function EmailPage() {
   const router = useRouter()
